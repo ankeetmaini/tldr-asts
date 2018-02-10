@@ -1,0 +1,24 @@
+{
+  "name": "tldr-asts",
+  "version": "1.0.0",
+  "description": "Sample code which deals with AST",
+  "main": "''",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix eslint-plugins",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": ["./node_modules/.bin/prettier --write", "eslint --fix", "git add"]
+  },
+  "author": "Ankeet Maini <ankeet.maini@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-react": "^7.5.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.10.2"
+  }
+}
