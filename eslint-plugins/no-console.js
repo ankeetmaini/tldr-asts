@@ -1,33 +1,27 @@
+import looksLike from '../utils/looksLike';
+
+const disallowedMethods = ['warn', 'log', 'info'];
+
 module.exports = {
   create(context) {
     return {
-      CallExpression: node => {
-        if (!isMember(node.callee)) {
-          return;
-        }
-        // check if MemberExpression is `console`
-        const isConsole =
-          isIdentifier(node.callee.object) &&
-          node.callee.object.name === 'console';
-        if (!isConsole) {
-          return;
-        }
-        const property = node.callee.property;
-        if (isIdentifier(property)) {
-          const name = property.name;
-          if (['warn', 'info', 'log'].indexOf(name) > -1) {
-            context.report(node, 'Using console is not allowed');
-          }
+      Identifier(node) {
+        const isConsole = looksLike(node, {
+          name: 'console',
+          parent: {
+            type: 'MemberExpression',
+            parent: {
+              type: 'CallExpression',
+            },
+            property: {
+              name: val => disallowedMethods.includes(val),
+            },
+          },
+        });
+        if (isConsole) {
+          context.report(node, 'No console allowed');
         }
       },
     };
   },
 };
-
-function isIdentifier(node) {
-  return node.type === 'Identifier';
-}
-
-function isMember(node) {
-  return node.type === 'MemberExpression';
-}
